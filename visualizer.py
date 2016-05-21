@@ -69,12 +69,51 @@ class Visualizer(xdot.DotWindow):
         vbox.reorder_child(hbox, 1)
         hbox.show()
 
+        """ for adding symbol"""
+        vbox2 = self.get_child()
+        hbox2 = gtk.HBox()
+
+        label_add_symbol = gtk.Label("Add symbol: ");
+        hbox2.pack_start(label_add_symbol, False)
+        label_add_symbol.show()
+
+        entry_add_symbol   = gtk.Entry(max=0)
+        entry_add_symbol.connect('activate', self.on_add_symbol)
+        hbox2.pack_start(entry_add_symbol, True, True, 10)
+        entry_add_symbol.show()
+
+        vbox2.pack_start(hbox2, False)
+        vbox2.reorder_child(hbox2, 1)
+        hbox2.show()
+
         """ code brower, maybe someday I will implement it """
 #        text = gtk.TextBuffer()
 #        text.set_text("Hello world")
 #        viewer = gtk.TextView(text)
 #        vbox.pack_start(viewer, False)
 #        viewer.show()
+
+    def on_add_symbol(self, widget):
+        symbol = widget.get_text()
+        print "symbol=" + symbol
+        symbol_from = symbol.split(",")[0];
+        symbol_to = symbol.split(",")[1];
+        print symbol_from
+        print symbol_to
+        widget.set_text('')
+
+        if self.working_dir is None:
+            # FIXME: let's have a dialog for the user.
+            self.on_newproject(None)
+
+        self.addSymbolManually(symbol_from, symbol_to)
+
+    def addSymbolManually(self, symbol_from, symbol_to):
+        dotcode = "digraph G{"
+        dotcode += "\"%s\";\"%s\";\"%s\" -> \"%s\";}" \
+            % (symbol_from, symbol_to, symbol_from, symbol_to)
+        print dotcode
+        self.set_dotcode(dotcode)
 
     def on_symbol_enter(self, widget):
         symbol = widget.get_text()
