@@ -32,6 +32,7 @@ import xdot
 class Visualizer(xdot.DotWindow):
 
     interest = {}
+    manually = ""
     working_dir = None
     filename = None
 
@@ -106,14 +107,9 @@ class Visualizer(xdot.DotWindow):
             # FIXME: let's have a dialog for the user.
             self.on_newproject(None)
 
-        self.addSymbolManually(symbol_from, symbol_to)
-
-    def addSymbolManually(self, symbol_from, symbol_to):
-        dotcode = "digraph G{"
-        dotcode += "\"%s\";\"%s\";\"%s\" -> \"%s\";}" \
-            % (symbol_from, symbol_to, symbol_from, symbol_to)
-        print dotcode
-        self.set_dotcode(dotcode)
+        self.manually += "\"%s\";" % symbol_from
+        self.manually += "\"%s\" -> \"%s\";" % (symbol_from, symbol_to)
+        self.update_graph()
 
     def on_symbol_enter(self, widget):
         symbol = widget.get_text()
@@ -145,12 +141,14 @@ class Visualizer(xdot.DotWindow):
             return
 
         dotcode = "digraph G {"
+        dotcode += self.manually
         for func in funcs:
             dotcode += "\"%s\";" % func
             allFuncs, funsCalled = self.functionsCalled (func)
             for m in (allFuncs & funcs):
                 dotcode += "\"%s\" -> \"%s\";" % (func, m)
         dotcode += "}"
+        print dotcode
         self.set_dotcode(dotcode)
 
         # saving the data.
@@ -268,6 +266,7 @@ class Visualizer(xdot.DotWindow):
             filename = chooser.get_filename()
             self.working_dir = filename
             self.interest = {}
+            self.manually = ""
             self.filename = None
             self.update_database()
             self.update_graph()
