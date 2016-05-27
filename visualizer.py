@@ -96,11 +96,8 @@ class Visualizer(xdot.DotWindow):
 
     def on_add_symbol(self, widget):
         symbol = widget.get_text()
-        print "symbol=" + symbol
         symbol_from = symbol.split(",")[0];
         symbol_to = symbol.split(",")[1];
-        print symbol_from
-        print symbol_to
         widget.set_text('')
 
         if self.working_dir is None:
@@ -136,7 +133,7 @@ class Visualizer(xdot.DotWindow):
     def update_graph(self):
         """ update dot code based on the interested keys """
         funcs = set(self.interest.keys())
-        if len(funcs) <= 0:
+        if self.manually=="" and len(funcs) <= 0:
             self.widget.graph = xdot.Graph()
             return
 
@@ -148,7 +145,6 @@ class Visualizer(xdot.DotWindow):
             for m in (allFuncs & funcs):
                 dotcode += "\"%s\" -> \"%s\";" % (func, m)
         dotcode += "}"
-        print dotcode
         self.set_dotcode(dotcode)
 
         # saving the data.
