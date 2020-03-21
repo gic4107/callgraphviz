@@ -1,0 +1,7 @@
+Use python2.7
+
+cannot find gobject
+Just comment out the fuxking gobject
+
+cannot find gtk
+sudo apt-get install python-gtk2
