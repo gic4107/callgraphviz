@@ -1,7 +1,9 @@
 Use python2.7
+Install dot: sudo apt install graphviz
 
 cannot find gobject
 Just comment out the fuxking gobject
 
 cannot find gtk
 sudo apt-get install python-gtk2
+
